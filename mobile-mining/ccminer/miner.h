@@ -214,6 +214,13 @@ static inline void le32enc(void *pp, uint32_t x)
 }
 #endif
 
+#if defined(__FreeBSD__)
+#define HAVE_DECL_BE16DEC 1
+#define HAVE_DECL_LE16DEC 1
+#define HAVE_DECL_BE16ENC 1
+#define HAVE_DECL_LE16ENC 1
+#endif
+
 #if !HAVE_DECL_BE16DEC
 static inline uint16_t be16dec(const void *pp)
 {
@@ -308,24 +315,7 @@ struct cgpu_info {
 	uint32_t rejected;
 	double khashes;
 	int has_monitoring;
-	float gpu_temp;
-	uint16_t gpu_fan;
-	uint16_t gpu_fan_rpm;
-	uint16_t gpu_arch;
-	uint32_t gpu_clock;
-	uint32_t gpu_memclock;
-	uint64_t gpu_mem;
-	uint64_t gpu_memfree;
-	uint32_t gpu_power;
-	uint32_t gpu_plimit;
-	double gpu_vddc;
-	int16_t gpu_pstate;
-	int16_t gpu_bus;
-	uint16_t gpu_vid;
-	uint16_t gpu_pid;
-
-	int8_t nvml_id;
-	int8_t nvapi_id;
+	
 
 	char gpu_sn[64];
 	char gpu_desc[64] = "cpu";
@@ -358,6 +348,7 @@ struct stats_data {
 	uint8_t npool;
 	uint8_t pool_type;
 	uint16_t align;
+	uint32_t globalhashcount;
 };
 
 struct hashlog_data {
@@ -442,7 +433,7 @@ extern uint64_t net_hashrate;
 extern double net_diff;
 extern double stratum_diff;
 
-#define MAX_GPUS 80
+#define MAX_GPUS 140
 //#define MAX_THREADS 32 todo
 extern char* device_name[MAX_GPUS];
 extern short device_map[MAX_GPUS];
@@ -628,7 +619,7 @@ struct work {
 	struct tx txs[POK_MAX_TXS];
 	// zec solution
 	uint8_t extra[1388];
-	unsigned char solution[1344];
+	uint8_t solution[1344];
 };
 
 #define POK_BOOL_MASK 0x00008000
@@ -773,71 +764,7 @@ void applog_hash64(void *hash);
 void applog_compare_hash(void *hash, void *hash_ref);
 
 void print_hash_tests(void);
-void allium_hash(void *state, const void *input);
-void bastionhash(void* output, const unsigned char* input);
-void blake256hash(void *output, const void *input, int8_t rounds);
-void blake2b_hash(void *output, const void *input);
-void blake2s_hash(void *output, const void *input);
-void bmw_hash(void *state, const void *input);
-void c11hash(void *output, const void *input);
-void cryptolight_hash_variant(void* output, const void* input, int len, int variant);
-void cryptolight_hash(void* output, const void* input);
-void cryptonight_hash_variant(void* output, const void* input, size_t len, int variant);
-void cryptonight_hash(void* output, const void* input);
-void monero_hash(void* output, const void* input);
-void stellite_hash(void* output, const void* input);
-void decred_hash(void *state, const void *input);
-void deephash(void *state, const void *input);
-void luffa_hash(void *state, const void *input);
-void fresh_hash(void *state, const void *input);
-void fugue256_hash(unsigned char* output, const unsigned char* input, int len);
-void heavycoin_hash(unsigned char* output, const unsigned char* input, int len);
-void hmq17hash(void *output, const void *input);
-void hsr_hash(void *output, const void *input);
-void keccak256_hash(void *state, const void *input);
-void jackpothash(void *state, const void *input);
-void groestlhash(void *state, const void *input);
-void jha_hash(void *output, const void *input);
-void lbry_hash(void *output, const void *input);
-void lyra2re_hash(void *state, const void *input);
-void lyra2v2_hash(void *state, const void *input);
-void lyra2Z_hash(void *state, const void *input);
-void myriadhash(void *state, const void *input);
-void neoscrypt(uchar *output, const uchar *input, uint32_t profile);
-void nist5hash(void *state, const void *input);
-void pentablakehash(void *output, const void *input);
-void phi_hash(void *output, const void *input);
-void phi2_hash(void *output, const void *input);
-void polytimos_hash(void *output, const void *input);
-void quarkhash(void *state, const void *input);
-void qubithash(void *state, const void *input);
-void scrypthash(void* output, const void* input);
-void scryptjane_hash(void* output, const void* input);
-void sha256d_hash(void *output, const void *input);
-void sha256t_hash(void *output, const void *input);
-void sibhash(void *output, const void *input);
-void skeincoinhash(void *output, const void *input);
-void skein2hash(void *output, const void *input);
-void skunk_hash(void *state, const void *input);
-void s3hash(void *output, const void *input);
-void timetravel_hash(void *output, const void *input);
-void bitcore_hash(void *output, const void *input);
-void tribus_hash(void *output, const void *input);
-void veltorhash(void *output, const void *input);
-void wcoinhash(void *state, const void *input);
-void whirlxHash(void *state, const void *input);
-void x11evo_hash(void *output, const void *input);
-void x11hash(void *output, const void *input);
-void x12hash(void *output, const void *input);
-void x13hash(void *output, const void *input);
-void x14hash(void *output, const void *input);
-void x15hash(void *output, const void *input);
-void x16r_hash(void *output, const void *input);
-void x16s_hash(void *output, const void *input);
-void x17hash(void *output, const void *input);
-void wildkeccak_hash(void *output, const void *input, uint64_t* scratchpad, uint64_t ssize);
-void zr5hash(void *output, const void *input);
-void zr5hash_pok(void *output, uint32_t *pdata);
+
 
 #ifdef __cplusplus
 }
