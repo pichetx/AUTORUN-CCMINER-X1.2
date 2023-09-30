@@ -684,9 +684,8 @@ static void calc_network_diff(struct work *work)
 	if (opt_algo == ALGO_DECRED) nbits = work->data[29];
 	if (opt_algo == ALGO_SIA) nbits = work->data[11]; // unsure if correct
 	if (opt_algo == ALGO_EQUIHASH) {
-	    // net_diff = equi_network_diff(work);
-	    net_diff = verus_network_diff(work);
-	    return;
+		net_diff = equi_network_diff(work);
+		return;
 	}
 
 	uint32_t bits = (nbits & 0xffffff);
@@ -850,7 +849,7 @@ int share_result(int result, int pooln, double sharediff, const char *reason)
 	char suppl[32] = { 0 };
 	char solved[16] = { 0 };
 	char s[32] = { 0 };
-	double hashrate = 200000.;
+	double hashrate = 0.;
 	struct pool_infos *p = &pools[pooln];
 
 	pthread_mutex_lock(&stats_lock);
@@ -1040,7 +1039,7 @@ static bool submit_upstream_work(CURL *curl, struct work *work)
 
 		if (net_diff && stratum.sharediff > net_diff && (opt_debug || opt_debug_diff))
 			applog(LOG_INFO, "\033[1;37;45m INFO   \033[0m share diff: %.5f, possible block found!!!",
-				        stratum.sharediff);
+				stratum.sharediff);
 		else if (opt_debug_diff)
 			applog(LOG_DEBUG, "\033[1;37;45m INFO   \033[0m share diff: %.5f (x %.1f)",
 				stratum.sharediff, work->shareratio[idnonce]);
@@ -1734,7 +1733,6 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			work_set_target(work, sctx->job.diff / (128.0 * opt_difficulty));
 			break;
 		case ALGO_EQUIHASH:
-			memcpy(work->target, sctx->job.extra, 32);
 			equi_work_set_target(work, sctx->job.diff / opt_difficulty);
 			break;
 		default:
