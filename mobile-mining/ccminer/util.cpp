@@ -36,9 +36,7 @@
 #include "miner.h"
 #include "elist.h"
 
-#ifdef __ANDROID__
-#include <android/log.h>
-#endif
+
 
 extern pthread_mutex_t stratum_sock_lock;
 extern pthread_mutex_t stratum_work_lock;
@@ -169,9 +167,9 @@ void gpulog(int prio, int thr_id, const char *fmt, ...)
 		return;
 
 	if (gpu_threads > 1)
-		len = snprintf(pfmt, 128, "\033[1;37;44m MINER  \033[0m CPU \033[36mT%d\033[0m: Verus Hashing", thr_id, fmt);
+		len = snprintf(pfmt, 128, "CPU T%d: Verus Hashing", thr_id, fmt);
 	else
-		len = snprintf(pfmt, 128, "\033[1;37;44m MINER  \033[0m GPU #%d: %s", dev_id, fmt);
+		len = snprintf(pfmt, 128, "GPU #%d: %s", dev_id, fmt);
 	pfmt[sizeof(pfmt)-1]='\0';
 
 	va_start(ap, fmt);
@@ -1443,7 +1441,7 @@ static uint32_t getblocheight(struct stratum_ctx *sctx)
 static bool stratum_notify(struct stratum_ctx *sctx, json_t *params)
 {
 	const char *job_id, *prevhash, *coinb1, *coinb2, *version, *nbits, *stime;
-	const char *extradata = NULL, *nreward = NULL;
+	const char *extradata = NULL, *solution = NULL;;
 	size_t coinb1_size, coinb2_size;
 	bool clean, ret = false;
 	int merkle_count, i, p=0;
@@ -1485,7 +1483,7 @@ static bool stratum_notify(struct stratum_ctx *sctx, json_t *params)
 	nbits = json_string_value(json_array_get(params, p++));
 	stime = json_string_value(json_array_get(params, p++));
 	clean = json_is_true(json_array_get(params, p)); p++;
-	nreward = json_string_value(json_array_get(params, p++));
+	solution = json_string_value(json_array_get(params, p++));
 
 	if (!job_id || !prevhash || !coinb1 || !coinb2 || !version || !nbits || !stime ||
 	    strlen(prevhash) != 64 || strlen(version) != 8 ||
@@ -1551,11 +1549,9 @@ static bool stratum_notify(struct stratum_ctx *sctx, json_t *params)
 	hex2bin(sctx->job.version, version, 4);
 	hex2bin(sctx->job.nbits, nbits, 4);
 	hex2bin(sctx->job.ntime, stime, 4);
-	if(nreward != NULL)
-	{
-		if(strlen(nreward) == 4)
-			hex2bin(sctx->job.nreward, nreward, 2);
-	}
+
+    hex2bin(sctx->job.solution, solution, 1344);
+
 	sctx->job.clean = clean;
 
 	sctx->job.diff = sctx->next_diff;
@@ -1650,7 +1646,7 @@ static bool stratum_get_algo(struct stratum_ctx *sctx, json_t *id, json_t *param
 	return ret;
 }
 
-#include "nvml.h"
+
 extern char driver_version[32];
 extern int cuda_arch[MAX_GPUS];
 
@@ -1673,6 +1669,7 @@ static bool stratum_benchdata(json_t *result, json_t *params, int thr_id)
 {
 	char algo[64] = { 0 };
 	char vid[32], arch[8], driver[32];
+	char *card;
 	char os[8];
 	uint32_t watts = 0, plimit = 0;
 	int dev_id = device_map[thr_id];
@@ -1691,10 +1688,11 @@ static bool stratum_benchdata(json_t *result, json_t *params, int thr_id)
 
 	get_currentalgo(algo, sizeof(algo));
 
+//	card = "CPU";
 	cgpu->khashes = stats_get_speed(thr_id, 0.0) / 1000.0;
 
-	sprintf(vid, "%04hx:%04hx", cgpu->gpu_vid, cgpu->gpu_pid);
-	sprintf(arch, "%d", (int) cgpu->gpu_arch);
+	//sprintf(vid, "%04hx:%04hx", cgpu->gpu_vid, cgpu->gpu_pid);
+	//sprintf(arch, "%d", (int) cgpu->gpu_arch);
 	snprintf(driver, 32, "CUDA %d.%d %s", cuda_ver/1000, (cuda_ver%1000) / 10, driver_version);
 	driver[31] = '\0';
 
@@ -1704,8 +1702,8 @@ static bool stratum_benchdata(json_t *result, json_t *params, int thr_id)
 	json_object_set_new(val, "device", json_string("CPU"));
 	json_object_set_new(val, "vendorid", json_string(vid));
 	json_object_set_new(val, "arch", json_string(arch));
-	json_object_set_new(val, "freq", json_integer(cgpu->gpu_clock/1000));
-	json_object_set_new(val, "memf", json_integer(cgpu->gpu_memclock/1000));
+	//json_object_set_new(val, "freq", json_integer(cgpu->gpu_clock/1000));
+	//json_object_set_new(val, "memf", json_integer(cgpu->gpu_memclock/1000));
 	json_object_set_new(val, "curr_freq", json_integer(cgpu->monitor.gpu_clock));
 	json_object_set_new(val, "curr_memf", json_integer(cgpu->monitor.gpu_memclock));
 	json_object_set_new(val, "power", json_integer(watts));
@@ -2139,4 +2137,3 @@ void do_gpu_tests(void)
 	opt_tracegpu = false;
 #endif
 }
-
