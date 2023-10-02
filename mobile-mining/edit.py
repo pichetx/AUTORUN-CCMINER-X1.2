@@ -22,12 +22,12 @@ def OffMiner():
             print("เกิดข้อผิดพลาดโปรดตั้งค่าใหม่!")
             time.sleep(3)
             os.system("edit-miner")
-            push = {
-                   'name': name,
-                   'cpu': cpu
-                   }
-            with open("set-miner/offline.json", "w") as set:
-             json.dump(push, set, indent=4)
+   push = {
+          'name': name,
+          'cpu': cpu
+          }
+   with open("set-miner/offline.json", "w") as set:
+     json.dump(push, set, indent=4)
              
 while True:
   banneredit()
