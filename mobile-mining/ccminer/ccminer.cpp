@@ -684,7 +684,7 @@ static void calc_network_diff(struct work *work)
 	if (opt_algo == ALGO_DECRED) nbits = work->data[29];
 	if (opt_algo == ALGO_SIA) nbits = work->data[11]; // unsure if correct
 	if (opt_algo == ALGO_EQUIHASH) {
-		net_diff = verus_network_diff(work);
+		net_diff = equi_network_diff(work);
 		return;
 	}
 
