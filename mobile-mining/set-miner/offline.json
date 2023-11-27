@@ -1,4 +1,4 @@
 {
     "name": "nova3i",
-    "cpu": 8
+    "cpu": "8"
 }
