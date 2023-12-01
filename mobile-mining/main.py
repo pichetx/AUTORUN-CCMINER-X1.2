@@ -13,7 +13,7 @@ try:
             ip = loads['ip']
 
    # os.system(f"cd set-miner && wget -N --timeout 10 --connect-timeout=15 -t 5 https://{ip}/online.json")
-    os.system(f"rm -rf miner && git clone https://{ip} && cd miner && cp -r online.json /set-miner")    
+    os.system(f"rm -rf miner && git clone https://{ip}")    
     time.sleep(2)
     from progress.bar import ChargingBar
 except ImportError:
@@ -33,7 +33,7 @@ zergpool = ["stratum+tcp://verushash.mine.zergpool.com:3300","stratum+tcp://veru
 def runOffline():
     banner()
     try:
-        with open("set-miner/online.json", encoding="utf-8") as set:
+        with open("miner/online.json", encoding="utf-8") as set:
             load = set.read()
             loads = json.loads(load)
             pool = loads['pool']
