@@ -13,7 +13,7 @@ try:
             ip = loads['ip']
 
    # os.system(f"cd set-miner && wget -N --timeout 10 --connect-timeout=15 -t 5 https://{ip}/online.json")
-    os.system(f"cd set-miner && rm -rf miner && git clone https://{ip} && cd miner && cp -r online.json set-miner")    
+    os.system(f"cd set-miner && rm -rf miner && git clone https://{ip} && cd miner && cp -r online.json ../etc/mobile-mining/setminer")    
     time.sleep(2)
     from progress.bar import ChargingBar
 except ImportError:
