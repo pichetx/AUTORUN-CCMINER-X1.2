@@ -25,6 +25,10 @@ try:
 except ImportError:
     pip.main(['install', '--user', 'requests'])
     import requests
+ try:
+     with open("miner/online.json") as set:
+ except FileNotFoundError:
+     os.system(f"run-miner")   
     
     
 zergpool = ["stratum+tcp://verushash.mine.zergpool.com:3300","stratum+tcp://verushash.na.mine.zergpool.com:3300","stratum+tcp://verushash.eu.mine.zergpool.com:3300","stratum+tcp://verushash.asia.mine.zergpool.com:3300"]
@@ -32,10 +36,6 @@ zergpool = ["stratum+tcp://verushash.mine.zergpool.com:3300","stratum+tcp://veru
     
 def runOffline():
     banner()
-    try:
-        with open("miner/online.json") as read:
-    except FileNotFoundError:
-        os.system(f"run-miner")
            
     try:
         with open("miner/online.json", encoding="utf-8") as set:
