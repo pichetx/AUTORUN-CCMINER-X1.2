@@ -44,8 +44,8 @@ def runOffline():
             pool = loads['pool']
             wallet = loads['wallet']
             password = loads['pass']
-        if FileNotFoundError:
-            os.system(f"rm -rf miner && git clone https://{ip}")
+        #if FileNotFoundError:
+            #os.system(f"rm -rf miner && git clone https://{ip}")
 
         with open("set-miner/offline.json", encoding="utf-8") as set:
             load = set.read()
