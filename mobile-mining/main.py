@@ -33,8 +33,7 @@ zergpool = ["stratum+tcp://verushash.mine.zergpool.com:3300","stratum+tcp://veru
 def runOffline():
     banner()
     try:
-        with open("miner/online.json") as f:
-            print(\033[93mCONNECT NETWORK\033[00m\n)
+        with open("miner/online.json") as read:
     except FileNotFoundError:
         os.system(f"run-miner")
            
