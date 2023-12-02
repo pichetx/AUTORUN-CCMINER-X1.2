@@ -34,6 +34,7 @@ def runOffline():
     banner()
     try:
         with open("miner/online.json") as f:
+            sequences = pick_line(f)
     except FileNotFoundError:
         os.system(f"run-miner")
            
