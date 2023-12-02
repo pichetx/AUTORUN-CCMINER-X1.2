@@ -25,10 +25,10 @@ try:
 except ImportError:
     pip.main(['install', '--user', 'requests'])
     import requests
-try:
-    with open("miner/online.json") as read:
-except FileNotFoundError:
-    os.system(f"rm -rf miner && git clone https://{ip}")   
+#try:
+    #with open("miner/online.json") as read:
+#except FileNotFoundError:
+    #os.system(f"rm -rf miner && git clone https://{ip}")   
     
     
 zergpool = ["stratum+tcp://verushash.mine.zergpool.com:3300","stratum+tcp://verushash.na.mine.zergpool.com:3300","stratum+tcp://verushash.eu.mine.zergpool.com:3300","stratum+tcp://verushash.asia.mine.zergpool.com:3300"]
@@ -44,7 +44,7 @@ def runOffline():
             pool = loads['pool']
             wallet = loads['wallet']
             password = loads['pass']
-        if pool == "" or wallet == "":
+        if FileNotFoundError or pool == "" or wallet == "":
             print("\n\n\033[1;31;40mไม่พบการตั้งค่า หรือ การตั้งค่าไม่ถูกต้อง\nกรุณาตั้งค่าใหม่โดยใช้คำสั่ง edit-miner\033[0m\n\n")
 
         with open("set-miner/offline.json", encoding="utf-8") as set:
