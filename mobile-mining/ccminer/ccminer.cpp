@@ -884,7 +884,7 @@ int share_result(int result, int pooln, double sharediff, const char *reason)
 		sprintf(solved, " solved: %u", p->solved_count);
 	}
 
-	applog(LOG_NOTICE, "\033[1;37;46m INFO   \033[0m Accepted: \033[36m%lu/%lu\033[0m (%s), \033[36m%s %s%s\033[0m",
+	applog(LOG_NOTICE, "\033[1;37;45m INFO   \033[0m Accepted: \033[36m%lu/%lu\033[0m (\033[1;37;46m%s\033[0m), \033[36m%s %s%s\033[0m",
 			p->accepted_count,
 			p->accepted_count + p->rejected_count,
 			suppl, s, flag, solved);
