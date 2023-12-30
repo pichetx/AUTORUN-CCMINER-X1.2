@@ -1745,7 +1745,7 @@ static bool stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		stratum_diff = sctx->job.diff;
 		if (opt_showdiff && work->targetdiff != stratum_diff)
 			snprintf(sdiff, 32, " (%.5f)", work->targetdiff);
-		applog(LOG_WARNING, "\033[1;37;40m INFO   \033[0m" "\033[33mStratum difficulty set to %g%s\033[0m", stratum_diff, sdiff);
+		applog(LOG_WARNING, "\033[1;37;43m INFO   \033[0m" "\033[33mStratum difficulty set to %g%s\033[0m", stratum_diff, sdiff);
 	}
 
 	return true;
@@ -2708,7 +2708,7 @@ wait_stratum_url:
 		goto out;
 
 	if (!pool_is_switching)
-		applog(LOG_BLUE, "\033[1;37;45m INFO   \033[0m""\033[33m Starting on %s \033[0m", stratum.url);
+		applog(LOG_BLUE, "\033[1;37;46m INFO   \033[0m""\033[36m Starting on %s \033[0m", stratum.url);
 
 	ctx->pooln = pooln = cur_pooln;
 	switchn = pool_switch_count;
@@ -2755,7 +2755,7 @@ wait_stratum_url:
 				if (switchn != pool_switch_count)
 					goto pool_switched;
 				if (!opt_benchmark)
-					applog(LOG_ERR, "\033[1;37;31m INFO   \033[0m""\033[22;31m ...retry after %d seconds\033[0m", opt_fail_pause);
+					applog(LOG_ERR, "\033[1;37;43m INFO   \033[0m""\033[22;31m ...retry after %d seconds\033[0m", opt_fail_pause);
 				sleep(opt_fail_pause);
 			}
 		}
