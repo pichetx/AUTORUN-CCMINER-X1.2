@@ -3683,11 +3683,9 @@ int main(int argc, char *argv[])
 	// get opt_quiet early
 	parse_single_opt('q', argc, argv);
 
-	#printf("*******************************************\n");	
 	printf("\033[22;36m ccminer CPU \033[0m  : " PACKAGE_VERSION "\n");
 	printf("Verushash v2.2 based on ccminer\n");
-	#printf("*******************************************\n");	
-        printf("                                           \n");
+	printf("                                           \n");
 	
 	rpc_user = strdup("");
 	rpc_pass = strdup("");
